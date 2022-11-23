@@ -1,0 +1,171 @@
+DEPARTMENT OF COMPUTER SCIENCE AND
+           ENGINEERING
+
+
+        CSL76: BIG DATA LABORATORY
+
+            TERM: Sep2022- Jan2022
+
+
+            ASSIGNMENT REPORT
+
+                  PIG Programs
+
+
+                        By
+                  Manoj Kumar M
+                   1MS19CS068
+
+
+                    Submitted to
+                Dr. S. Rajarajeswari
+                Associate Professor
+
+
+
+
+  M.S. RAMAIAH INSTITUTE OF TECHNOLOGY
+     (Autonomous Institute, Affiliated to VTU)
+     1. Program to filter those entries where city is “Chennai”
+
+           1. Navigate to Extracted Pig Folder cd ~/Desktop/1ms19cs068/hadoop-3.2.2
+           2. Create a New File named Bash.sh
+
+               export JAVA_HOME=$(readlink -f $(which javac) | awk 'BEGIN {FS="/bin"} {print
+               $1}') if ! command -v pig &>
+               /dev/null then
+               export PATH=$(echo $PATH):$(pwd)/bin
+               fi
+
+           3. Execute Bash.sh inside hadoop Folder using the command source Bash.sh
+           4. Navigate to pig-0.17.0 folder
+           5. Verify Pig is Installed or not by executing pig or pig –version
+           6. Create a new file named filter.pig
+
+               student_details = LOAD 'student_details.txt' USING
+               PigStorage(',') as (id:int, firstname:chararray, lastname:chararray, age:int,
+               phone:chararray, city:chararray);
+               filter_data = FILTER student_details BY city == 'Chennai'; Dump
+               filter_data;
+
+           7. Create a file named student_details.txt
+
+               001,Rajiv,Reddy,21,9848022337,Hyderabad
+               002,siddarth,Battacharya,22,9848022338,Kolkata
+               003,Rajesh,Khanna,22,9848022339,Delhi
+               004,Preethi,Agarwal,21,9848022330,Pune
+               005,Trupthi,Mohanthy,23,9848022336,Bhuwaneshwar
+               006,Archana,Mishra,23,9848022335,Chennai
+               007,Komal,Nayak,24,9848022334,trivendram
+               008,Bharathi,Nambiayar,24,9848022333,Chennai
+
+           8. Execute the pig file using the command pig filename.pig pig filter.pig
+
+Output :
+2. Program to group entries by age.
+
+   group.pig
+
+      student = LOAD 'student_details.txt' USING PigStorage(',') as (id:int,
+      firstname:chararray,lastname:chararray, age:int, phone:chararray, city:chararray);
+      group_data = GROUP student by age;
+      Dump group_data;
+
+   student_details.txt
+
+      001,Rajiv,Reddy,21,9848022337,Hyderabad
+      002,siddarth,Battacharya,22,9848022338,Kolkata
+      003,Rajesh,Khanna,22,9848022339,Delhi
+      004,Preethi,Agarwal,21,9848022330,Pune
+      005,Trupthi,Mohanthy,23,9848022336,Bhuwaneshwar
+      006,Archana,Mishra,23,9848022335,Chennai
+      007,Komal,Nayak,24,9848022334,trivendram
+      008,Bharathi,Nambiayar,24,9848022333,Chennai
+
+
+
+Output :
+3. Program to sort the entries by age in the descending order.
+
+   sorting.pig
+
+      student = LOAD 'student_details.txt'
+      USING
+      PigStorage(',') as (id:int, firstname:chararray, lastname:chararray,
+      age:int, phone:chararray, city:chararray);
+      student_order = ORDER student BY age DESC;
+      Dump student_order;
+
+   student_details.txt
+
+      001,Rajiv,Reddy,21,9848022337,Hyderabad
+      002,siddarth,Battacharya,22,9848022338,Kolkata
+      003,Rajesh,Khanna,22,9848022339,Delhi
+      004,Preethi,Agarwal,21,9848022330,Pune
+      005,Trupthi,Mohanthy,23,9848022336,Bhuwaneshwar
+      006,Archana,Mishra,23,9848022335,Chennai
+      007,Komal,Nayak,24,9848022334,trivendram
+      008,Bharathi,Nambiayar,24,9848022333,Chennai
+
+Output :
+4. Program to join two separate data files into one data file.
+
+   join.pig
+
+      customers = LOAD
+      'customer.txt' USING
+      PigStorage(',') as (id:int, name:chararray,
+      age:int,address:chararray, salary:int);
+      orders = LOAD '/home/lab2/1MS19CS068/pig-0.17.0/order.txt'
+      USING PigStorage(',') as (oid:int, date:chararray,
+      customer_id:int,amount:int);
+      join_result = JOIN customers BY id, orders BY customer_id;
+      Dump join_result
+
+   customer.txt
+
+      1,Ramesh,32,Ahmedabad,2000.00
+      2,Khilan,25,Delhi,1500.00
+      3,kaushik,23,Kota,2000.00
+      4,Chaitali,25,Mumbai,6500.00
+      5,Hardik,27,Bhopal,8500.00
+      6,Komal,22,MP,4500.00
+      7,Muffy,24,Indore,10000.00
+
+   order.txt
+
+       102,2009-10-08 00:00:00,3,3000
+       100,2009-10-08 00:00:00,3,1500
+       101,2009-11-20 00:00:00,2,1560
+       103,2008-05-20 00:00:00,4,2060
+
+Output :
+5. Program to perform union operation on two data sets.
+
+   union.pig
+
+      cust1 = LOAD 'customer1.txt' USING PigStorage(',') as (id:int,
+      firstname:chararray, lastname:chararray, phone:chararray,
+      city:chararray);
+      cust2 = LOAD 'customer2.txt' USING PigStorage(',') as (id:int,
+      firstname:chararray, lastname:chararray, phone:chararray,
+      city:chararray);
+      cust = UNION cust1, cust2;
+      Dump cust
+
+   customer1.txt
+
+      001,Rajiv,Reddy,9848022337,Hyderabad
+      002,siddarth,Battacharya,9848022338,Kolkata
+      003,Rajesh,Khanna,9848022339,Delhi
+      004,Preethi,Agarwal,9848022330,Pune
+      005,Trupthi,Mohanthy,9848022336,Bhuwaneshwar
+      006,Archana,Mishra,9848022335,Chennai
+
+   customer2.txt
+
+      7,Komal,Nayak,9848022334,trivendram.
+      8,Bharathi,Nambiayar,9848022333,Chennai
+
+Output :
+
